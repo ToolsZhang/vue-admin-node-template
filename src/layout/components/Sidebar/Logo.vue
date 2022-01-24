@@ -1,0 +1,129 @@
+<template>
+  <div
+    class="sidebar-logo-container"
+    :class="{'collapse':collapse}"
+    :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBg : variables.menuLightBg }"
+  >
+    <transition name="sidebarLogoFade">
+      <router-link
+        v-if="collapse"
+        key="collapse"
+        class="sidebar-logo-link"
+        to="/"
+      >
+        <img
+          v-if="logo"
+          :src="logo"
+          class="sidebar-logo"
+        >
+        <h1
+          v-else
+          class="sidebar-title"
+          :style="{ color: sideTheme === 'theme-dark' ? variables.sidebarTitle : variables.sidebarLightTitle }"
+        >{{ title }} </h1>
+      </router-link>
+      <router-link
+        v-else
+        key="expand"
+        class="sidebar-logo-link"
+        to="/"
+      >
+        <img
+          v-if="logo"
+          :src="logo"
+          class="sidebar-logo"
+        >
+        <h1
+          class="sidebar-title"
+          :style="{ color: sideTheme === 'theme-dark' ? variables.sidebarTitle : variables.sidebarLightTitle }"
+          v-html="title"
+         ></h1>
+      </router-link>
+    </transition>
+  </div>
+</template>
+
+<script>
+import logoImg from "@/assets/logo/logo.png";
+import variables from "@/assets/styles/variables.scss";
+
+export default {
+  name: "SidebarLogo",
+  props: {
+    collapse: {
+      type: Boolean,
+      required: true
+    }
+  },
+  computed: {
+    variables() {
+      return variables;
+    },
+    sideTheme() {
+      return this.$store.state.settings.sideTheme;
+    }
+  },
+  data() {
+    return {
+      title: '于田诉求政务服务<br/>后台管理系统',
+      logo: logoImg
+    };
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.sidebarLogoFade-enter-active {
+  transition: opacity 1.5s;
+}
+
+.sidebarLogoFade-enter,
+.sidebarLogoFade-leave-to {
+  opacity: 0;
+}
+
+.sidebar-logo-container {
+  position: relative;
+  width: 100%;
+  // height: 100px;
+  // line-height: 100px;
+  background: #2b2f3a;
+  text-align: center;
+  overflow: hidden;
+
+  & .sidebar-logo-link {
+    height: 100%;
+    width: 100%;
+    padding: 20px 0;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & .sidebar-logo {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      // margin: 0 auto;
+      // margin-right: 12px;
+    }
+
+    & .sidebar-title {
+      // display: inline-block;
+      margin-top:10px;
+      color: #fff;
+      font-weight: 600;
+      line-height: 25px;
+      font-size: 14px;
+      font-family: Avenir, Helvetica Neue, Arial, Helvetica, sans-serif;
+      vertical-align: middle;
+    }
+  }
+
+  &.collapse {
+    .sidebar-logo {
+      margin-right: 0px;
+    }
+  }
+}
+</style>
